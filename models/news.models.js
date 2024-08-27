@@ -1,5 +1,13 @@
 const db = require("../db/connection");
-const api = require("../endpoints.json")
+const api = require("../endpoints.json");
+const checkExists = require("../utils");
+
+//reference note
+// const selectPets = async ({ species }) => {
+//   if (!pets.length) {
+//     await checkExists("species", "species_name", species);
+//   }
+// };
 
 exports.selectTopics = () => {
     const queryStr = `SELECT * FROM topics;`;

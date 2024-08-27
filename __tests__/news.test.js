@@ -14,7 +14,7 @@ afterAll(() => {
 
 describe("ALL TEST", () => {
   describe("/api/topics", () => {
-    test("Test 1 - 200 returns topics with correct keys", () => {
+    test("200 returns topics with correct keys", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)

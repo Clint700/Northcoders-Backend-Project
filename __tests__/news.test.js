@@ -53,7 +53,7 @@ describe("/api", () => {
   });
 });
 
-describe("GET", () => {
+describe("/api/articles", () => {
   test("200: responds with an article object, which has appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")

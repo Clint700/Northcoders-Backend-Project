@@ -1,7 +1,4 @@
-const {
-  selectTopics,
-  articleById,
-} = require("../models/news.models");
+const { selectTopics, articleById, selectedArticles } = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
 exports.getTopics = (req, res, next) => {
@@ -27,4 +24,13 @@ exports.getArticleById = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getArticles = (req, res, next) => {
+  selectedArticles().then((articles) => {
+    res.status(200).send({ articles });
+  })
+  .catch((err) => {
+    next(err)
+  })
 };

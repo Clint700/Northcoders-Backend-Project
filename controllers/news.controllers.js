@@ -1,8 +1,14 @@
-const { selectTopics, articleById, selectedArticles, selectedArticlesComments } = require("../models/news.models");
+const {
+  selectedTopics,
+  articleById,
+  selectedArticles,
+  selectedArticlesComments,
+  insertComment,
+} = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
 exports.getTopics = (req, res, next) => {
-  selectTopics()
+  selectedTopics()
     .then((topics) => {
       res.status(200).send({ topics });
     })
@@ -27,23 +33,44 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectedArticles().then((articles) => {
-    res.status(200).send({ articles });
-  })
-  .catch((err) => {
-    next(err)
-  })
+  selectedArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getArticleComments = (req, res, next) => {
-  const { article_id } = req.params
-  articleById(article_id).then(() => {
-    return selectedArticlesComments(article_id)
-  })
-  .then((comments) => {
-    res.status(200).send({ comments })
-  })
-  .catch((err) => {
-    next(err)
-  })
+  const { article_id } = req.params;
+  articleById(article_id)
+    .then(() => {
+      return selectedArticlesComments(article_id);
+    })
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+
+  if (isNaN(article_id)) {
+    return res.status(400).send({ msg: "Article ID Must Be A Number" });
+  } else if (!username || !body) {
+    return res.status(400).send({ msg: "Bad request" });
+  } else {
+    insertComment(article_id, username, body)
+      .then((comment) => {
+        res.status(201).send({ comment });
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
 };

@@ -136,12 +136,12 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("200: responds with an appropriate error message for an empty comment or array", () => {
+  test("200: responds with an empty array for an empty comment or array", () => {
     return request(app)
       .get("/api/articles/4/comments")
       .expect(200)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("No comments found")
+      .then(({ body: { comments } }) => {
+        expect(comments).toEqual([]);
       });
   });
 
@@ -160,6 +160,69 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("201: POST /api/articles/:article_id/comments - responds with the newly added comment", () => {
+    const newComment = {
+      username: "clint700",
+      body: "Excellent article",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            body: "Excellent article",
+            votes: 0,
+            author: "icellusedkars",
+            article_id: 3,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+
+  test("404: test for an invalid article_id e.g 404", () => {
+    const newComment = {
+      username: "clint700",
+      body: "Highly recommedable",
+    };
+    return request(app)
+      .post("/api/articles/404/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article not found");
+      });
+  });
+
+  test("400: test for a missing field by the client e.g no username or comment body", () => {
+    const newComment = {
+      username: "clint700",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  test("400: test for an invalid article_id e.g not-a-number", () => {
+    const newComment = {
+      username: "clint700",
+      body: "Highly recommedable",
+    };
+    return request(app)
+      .post("/api/articles/not-a-number/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article ID Must Be A Number");
       });
   });
 });

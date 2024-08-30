@@ -70,12 +70,11 @@ exports.insertComment = (article_id, username, body) => {
 
 exports.insertVote = (article_id, votes) => {
   return db
-  .query("SELECT * FROM articles WHERE article_id = $1", [article_id])
+  .query("UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *", [votes, article_id])
   .then(({rows}) => {
     if(rows.length === 0){
       return Promise.reject({status: 404, msg: 'Invalid article ID'})
     }
-    rows[0].votes += votes
     return rows[0]
   })
 }

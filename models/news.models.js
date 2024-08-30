@@ -43,7 +43,7 @@ exports.selectedArticlesComments = async (article_id) => {
   return rows;
 };
 
-exports.insertComment = (article_id, username, body) => {
+exports.insertComment = async (article_id, username, body) => {
   return db
     .query("SELECT * FROM articles WHERE article_id = $1", [article_id])
     .then(({ rows }) => {
@@ -68,7 +68,7 @@ exports.insertComment = (article_id, username, body) => {
     });
 };
 
-exports.insertVote = (article_id, votes) => {
+exports.insertVote = async (article_id, votes) => {
   return db
     .query(
       "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *",
@@ -82,7 +82,7 @@ exports.insertVote = (article_id, votes) => {
     });
 };
 
-exports.deletedComment = (comment_id) => {
+exports.deletedComment = async (comment_id) => {
   return db
     .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [
       comment_id,
@@ -94,3 +94,8 @@ exports.deletedComment = (comment_id) => {
       return rows[0];
     });
 };
+
+exports.selectedUsers = async () => {
+  const { rows } = await db.query(`SELECT * FROM users`)
+  return rows;
+}

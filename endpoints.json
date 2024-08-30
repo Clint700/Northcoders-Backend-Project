@@ -93,5 +93,23 @@
       "url": "/api/comments/4",
       "method": "DELETE"
     }
+  },
+
+  "GET /api/users": {
+    "description": "This endpoint allows users to fetch all users",
+    "example_request": {
+      "url": "/api/users",
+      "method": "GET"
+    },
+    "example_response": [
+      {
+        "username": "butter_bridge",
+        "name": "jonny",
+        "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+      },
+      {
+        "etc": "..."
+      }
+    ]
   }
 }

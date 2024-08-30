@@ -4,6 +4,7 @@ const {
   selectedArticles,
   selectedArticlesComments,
   insertComment,
+  insertVote,
 } = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
@@ -73,4 +74,24 @@ exports.postComment = (req, res, next) => {
         next(err);
       });
   }
+};
+
+exports.patchArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  const { votes } = req.body;
+
+  if (typeof votes !== "number" && !votes) {
+    return res.status(400).send({ msg: "Bad Request" });
+  }
+
+  if (isNaN(article_id)) {
+    return res.status(400).send({ msg: "Article ID must be a number" });
+  }
+  insertVote(article_id, votes)
+    .then((vote) => {
+      res.status(200).send({ vote });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

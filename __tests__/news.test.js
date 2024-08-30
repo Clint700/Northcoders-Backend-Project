@@ -297,7 +297,7 @@ describe("PATCH /api/articles/:article_id", () => {
   test("200: Ignores other properties", () => {
     const newVote = {
       votes: 10,
-      otherProperty: 200
+      otherProperty: 200,
     };
 
     return request(app)
@@ -305,7 +305,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(newVote)
       .expect(200)
       .then(({ body: { vote } }) => {
-        expect(vote.otherProperty).toBeUndefined()
+        expect(vote.otherProperty).toBeUndefined();
         expect(vote).toEqual(
           expect.objectContaining({
             title: "Eight pug gifs that remind me of mitch",
@@ -363,7 +363,7 @@ describe("PATCH /api/articles/:article_id", () => {
 
   test("400: If vote isn't a number", () => {
     const newVote = {
-      vote: "not a number"
+      vote: "not a number",
     };
 
     return request(app)
@@ -372,6 +372,30 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad Request");
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: No content", () => {
+    return request(app).delete("/api/comments/4").expect(204);
+  });
+
+  test("404: returns not found when comment_id does not exist e.g 404", () => {
+    return request(app)
+      .delete("/api/comments/404")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment not found");
+      });
+  });
+
+  test("400: returns bad request when comment_id is not a number", () => {
+    return request(app)
+      .delete("/api/comments/not-a-number")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Comment_id must be a number");
       });
   });
 });

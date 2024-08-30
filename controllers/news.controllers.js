@@ -3,13 +3,14 @@ const {
   articleById,
   selectedArticles,
   selectedArticlesComments,
+  selectedUsers,
   insertComment,
   insertVote,
   deletedComment,
 } = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
-exports.getTopics = (req, res, next) => {
+exports.getTopics = (_req, res, next) => {
   selectedTopics()
     .then((topics) => {
       res.status(200).send({ topics });
@@ -19,7 +20,7 @@ exports.getTopics = (req, res, next) => {
     });
 };
 
-exports.getEndpoints = (req, res) => {
+exports.getEndpoints = (_req, res) => {
   res.status(200).send({ endpoints });
 };
 
@@ -34,7 +35,7 @@ exports.getArticleById = (req, res, next) => {
     });
 };
 
-exports.getArticles = (req, res, next) => {
+exports.getArticles = (_req, res, next) => {
   selectedArticles()
     .then((articles) => {
       res.status(200).send({ articles });
@@ -110,3 +111,10 @@ exports.deleteComment = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getUsers = (_req, res, _next) => {
+  selectedUsers()
+  .then((users) => {
+    res.status(200).send({ users })
+  })
+}

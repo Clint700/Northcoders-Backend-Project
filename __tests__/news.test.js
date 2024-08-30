@@ -4,7 +4,6 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
 const endpointData = require("../endpoints.json");
-require("jest-sorted");
 
 beforeEach(() => {
   return seed(data);
@@ -165,7 +164,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 
   test("201: POST /api/articles/:article_id/comments - responds with the newly added comment", () => {
     const newComment = {
-      username: "clint700",
+      username: "icellusedkars",
       body: "Excellent article",
     };
     return request(app)
@@ -187,7 +186,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 
   test("404: test for an invalid article_id e.g 404", () => {
     const newComment = {
-      username: "clint700",
+      username: "icellusedkars",
       body: "Highly recommedable",
     };
     return request(app)
@@ -214,7 +213,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 
   test("400: test for an invalid article_id e.g not-a-number", () => {
     const newComment = {
-      username: "clint700",
+      username: "icellusedkars",
       body: "Highly recommedable",
     };
     return request(app)
@@ -223,6 +222,44 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Article ID Must Be A Number");
+      });
+  });
+
+  test("404: test for an invalid username e.g `noneUser`", () => {
+    const newComment = {
+      username: "noneUser",
+      body: "Highly recommedable",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("User does not exist");
+      });
+  });
+
+  test("201: POST /api/articles/:article_id/comments - responds with the newly added comment and ignores unnecessary properties", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "Excellent article",
+      otherProperties: "otherValues"
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment.otherProperties).toBeUndefined();
+        expect(comment).toEqual(
+          expect.objectContaining({
+            body: "Excellent article",
+            votes: 0,
+            author: "icellusedkars",
+            article_id: 3,
+            created_at: expect.any(String),
+          })
+        );
       });
   });
 });

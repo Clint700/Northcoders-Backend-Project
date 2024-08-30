@@ -5,6 +5,7 @@ const {
   selectedArticlesComments,
   insertComment,
   insertVote,
+  deletedComment,
 } = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
@@ -90,6 +91,20 @@ exports.patchArticleById = (req, res, next) => {
   insertVote(article_id, votes)
     .then((vote) => {
       res.status(200).send({ vote });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  if (isNaN(comment_id)) {
+    return res.status(400).send({ msg: "Comment_id must be a number" });
+  }
+  deletedComment(comment_id)
+    .then(() => {
+      res.status(204).send({ msg: "no content" });
     })
     .catch((err) => {
       next(err);

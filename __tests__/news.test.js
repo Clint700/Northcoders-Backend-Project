@@ -52,7 +52,7 @@ describe("/api", () => {
   });
 });
 
-describe("/api/articles", () => {
+describe("GET /api/articles/:articles_id", () => {
   test("200: responds with an article object, which has appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")
@@ -265,5 +265,113 @@ describe("/api/articles/:article_id/comments", () => {
           );
         });
     });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("200: Update an article by article_id", () => {
+    const newVote = {
+      votes: 10,
+    };
+
+    return request(app)
+      .patch("/api/articles/3")
+      .send(newVote)
+      .expect(200)
+      .then(({ body: { vote } }) => {
+        expect(vote).toEqual(
+          expect.objectContaining({
+            title: "Eight pug gifs that remind me of mitch",
+            topic: "mitch",
+            author: "icellusedkars",
+            votes: 10,
+            body: "some gifs",
+            created_at: expect.any(String),
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          })
+        );
+      });
+  });
+
+  test("200: Ignores other properties", () => {
+    const newVote = {
+      votes: 10,
+      otherProperty: 200
+    };
+
+    return request(app)
+      .patch("/api/articles/3")
+      .send(newVote)
+      .expect(200)
+      .then(({ body: { vote } }) => {
+        expect(vote.otherProperty).toBeUndefined()
+        expect(vote).toEqual(
+          expect.objectContaining({
+            title: "Eight pug gifs that remind me of mitch",
+            topic: "mitch",
+            author: "icellusedkars",
+            votes: 10,
+            body: "some gifs",
+            created_at: expect.any(String),
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          })
+        );
+      });
+  });
+
+  test("400: missing votes", () => {
+    const newVote = {};
+
+    return request(app)
+      .patch("/api/articles/3")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
+
+  test("404: Invalid article_id e.g 404", () => {
+    const newVote = {
+      votes: 10,
+    };
+
+    return request(app)
+      .patch("/api/articles/404")
+      .send(newVote)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid article ID");
+      });
+  });
+
+  test("400: article_id isn't a number e.g unknown", () => {
+    const newVote = {
+      votes: 10,
+    };
+
+    return request(app)
+      .patch("/api/articles/unknown")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article ID must be a number");
+      });
+  });
+
+  test("400: If vote isn't a number", () => {
+    const newVote = {
+      vote: "not a number"
+    };
+
+    return request(app)
+      .patch("/api/articles/3")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
   });
 });

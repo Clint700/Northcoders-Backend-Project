@@ -24,7 +24,7 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getArticleComments);
-app.get("/api/users", getUsers)
+app.get("/api/users", getUsers);
 app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", patchArticleById);
 app.delete("/api/comments/:comment_id", deleteComment);

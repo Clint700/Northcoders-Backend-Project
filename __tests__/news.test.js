@@ -403,29 +403,69 @@ describe("DELETE /api/comments/:comment_id", () => {
 describe("GET /api/users", () => {
   test("200: get all users", () => {
     return request(app)
-    .get("/api/users")
-    .expect(200)
-    .then(({body: {users}}) => {
-      expect(Array.isArray(users)).toBe(true)
-      expect(users.length).toBe(4)
-      users.forEach((user) => {
-        expect(user).toEqual(
-          expect.objectContaining({
-            username: expect.any(String),
-            name: expect.any(String),
-            avatar_url: expect.any(String)
-          })
-        )
-      })
-    })
-  })
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: { users } }) => {
+        expect(Array.isArray(users)).toBe(true);
+        expect(users.length).toBe(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
 
   test("404: responds with a 404 error if the endpoint is incorrect", () => {
     return request(app)
       .get("/api/unknown-path")
       .expect(404)
-      .then(({ body: {msg} }) => {
+      .then(({ body: { msg } }) => {
         expect(msg).toBe("Not Found");
       });
   });
-})
+});
+
+describe("GET /api/articles (sorting queries)", () => {
+  test("200: GET /api/articles via sorting queries, ensures the default articles are sorted by created_at and in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+
+  test("200: GET /api/articles via sorting queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=asc")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(Array.isArray(articles)).toBe(true);
+        expect(articles).toBeSortedBy("votes", { descending: false });
+      });
+  });
+
+  test("400: Error for invalid sort queries", () => {
+    return request(app)
+      .get("/api/articles?sort_by=unknown&order=asc")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid query");
+      });
+  });
+
+  test("400: Error for invalid order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=unknown")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid order");
+      });
+  });
+});

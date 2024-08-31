@@ -111,5 +111,14 @@
         "etc": "..."
       }
     ]
+  },
+
+  "GET /api/articles/sort_by=query&order=ascORdsc": {
+    "description": "This endpoint allows user to query articles using sort_by and order",
+    "example_request": {
+      "url": "/api/articles/sort_by=votes&order=asc",
+      "method": "GET"
+    },
+    "response": "api responds with approapriate sort_by and order queries"
   }
 }

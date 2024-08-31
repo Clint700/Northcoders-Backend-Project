@@ -20,13 +20,32 @@ exports.articleById = async (article_id) => {
   return rows[0];
 };
 
-exports.selectedArticles = async () => {
+exports.selectedArticles = async (sort_by = "created_at", order = "DESC") => {
+  const validSort_by = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "comment_count",
+  ];
+  const validOrders = ["asc", "desc"];
+
+  if (!validSort_by.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Invalid query" });
+  }
+
+  if (!validOrders.includes(order.toLowerCase())) {
+    return Promise.reject({ status: 400, msg: "Invalid order" });
+  }
+
   const { rows } = await db.query(
     `
   SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id)::INT AS comment_count 
   FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id
   GROUP BY articles.article_id
-  ORDER BY articles.created_at DESC
+  ORDER BY ${sort_by} ${order.toUpperCase()}
   `
   );
   return rows;
@@ -96,6 +115,6 @@ exports.deletedComment = async (comment_id) => {
 };
 
 exports.selectedUsers = async () => {
-  const { rows } = await db.query(`SELECT * FROM users`)
+  const { rows } = await db.query(`SELECT * FROM users`);
   return rows;
-}
+};

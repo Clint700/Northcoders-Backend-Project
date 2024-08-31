@@ -36,8 +36,11 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { sort_by, order } = req.query;
-  selectedArticles(sort_by, order)
+  const { sort_by, order, topic } = req.query;
+  if (!isNaN(topic)) {
+    return res.status(404).send({ msg: "Invalid topic" });
+  }
+  selectedArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })
@@ -114,8 +117,7 @@ exports.deleteComment = (req, res, next) => {
 };
 
 exports.getUsers = (_req, res, _next) => {
-  selectedUsers()
-  .then((users) => {
-    res.status(200).send({ users })
-  })
-}
+  selectedUsers().then((users) => {
+    res.status(200).send({ users });
+  });
+};

@@ -20,7 +20,11 @@ exports.articleById = async (article_id) => {
   return rows[0];
 };
 
-exports.selectedArticles = async (sort_by = "created_at", order = "DESC") => {
+exports.selectedArticles = async (
+  sort_by = "created_at",
+  order = "DESC",
+  topic
+) => {
   const validSort_by = [
     "author",
     "title",
@@ -31,6 +35,12 @@ exports.selectedArticles = async (sort_by = "created_at", order = "DESC") => {
     "comment_count",
   ];
   const validOrders = ["asc", "desc"];
+  let queryStr = `
+    SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id)::INT AS comment_count 
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+  `;
+  const queryValues = [];
 
   if (!validSort_by.includes(sort_by)) {
     return Promise.reject({ status: 400, msg: "Invalid query" });
@@ -40,14 +50,20 @@ exports.selectedArticles = async (sort_by = "created_at", order = "DESC") => {
     return Promise.reject({ status: 400, msg: "Invalid order" });
   }
 
-  const { rows } = await db.query(
-    `
-  SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id)::INT AS comment_count 
-  FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id
-  GROUP BY articles.article_id
-  ORDER BY ${sort_by} ${order.toUpperCase()}
-  `
-  );
+  if (topic) {
+    queryStr += `WHERE topic = $1 `;
+    queryValues.push(topic);
+  }
+
+  queryStr += `
+    GROUP BY articles.article_id
+    ORDER BY ${sort_by} ${order.toUpperCase()}
+  `;
+
+  const { rows } = await db.query(queryStr, queryValues);
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "Topic not found" });
+  }
   return rows;
 };
 

@@ -119,6 +119,15 @@
       "url": "/api/articles/sort_by=votes&order=asc",
       "method": "GET"
     },
-    "response": "api responds with approapriate sort_by and order queries"
+    "response": "api responds with approapriate article for the sort_by and order queries"
+  },
+
+  "GET /api/articles/topic=query": {
+    "description": "This endpoint allows user to query articles using topic",
+    "example_request": {
+      "url": "/api/articles/topic=cats",
+      "method": "GET"
+    },
+    "response": "api responds with approapriate articles for topic query"
   }
 }

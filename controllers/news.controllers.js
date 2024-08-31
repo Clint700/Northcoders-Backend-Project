@@ -35,8 +35,9 @@ exports.getArticleById = (req, res, next) => {
     });
 };
 
-exports.getArticles = (_req, res, next) => {
-  selectedArticles()
+exports.getArticles = (req, res, next) => {
+  const { sort_by, order } = req.query;
+  selectedArticles(sort_by, order)
     .then((articles) => {
       res.status(200).send({ articles });
     })

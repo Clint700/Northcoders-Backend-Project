@@ -1,33 +1,19 @@
-const express = require("express");
-const app = express();
-const {
-  getTopics,
-  getArticleById,
-  getEndpoints,
-  getArticles,
-  getArticleComments,
-  getUsers,
-  postComment,
-  patchArticleById,
-  deleteComment,
-} = require("./controllers/news.controllers");
+const express = require('express');
+const apiRouter = require('./routes');
+const { getEndpoints } = require('./controllers/news.controllers');
 const {
   psqlErrorHandler,
   customErrorHandler,
   serverErrorHandler,
 } = require("./error-handling");
 
+const app = express();
+
 app.use(express.json());
 
-app.get("/api", getEndpoints);
-app.get("/api/topics", getTopics);
-app.get("/api/articles/:article_id", getArticleById);
-app.get("/api/articles", getArticles);
-app.get("/api/articles/:article_id/comments", getArticleComments);
-app.get("/api/users", getUsers);
-app.post("/api/articles/:article_id/comments", postComment);
-app.patch("/api/articles/:article_id", patchArticleById);
-app.delete("/api/comments/:comment_id", deleteComment);
+app.get('/api', getEndpoints);
+
+app.use('/api', apiRouter);
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Not Found" });

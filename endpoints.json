@@ -138,5 +138,20 @@
       "method": "GET"
     },
     "response": "api responds with article of the given article id with comment_count"
+  },
+
+  "GET /api/users/:username": {
+    "description": "Returns a user object by username",
+    "example_request": {
+      "url": "/api/users/rogersop",
+      "method": "GET"
+    },
+    "example_response": {
+      "user": {
+        "username": "validUsername",
+        "avatar_url": "https://example.com/avatar.png",
+        "name": "User Name"
+      }
+    }
   }
 }

@@ -8,6 +8,7 @@ const {
   insertVote,
   deletedComment,
   selectedUser,
+  updateComment,
 } = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
@@ -124,11 +125,32 @@ exports.getUsers = (_req, res, _next) => {
 };
 
 exports.getUsersByID = (req, res, next) => {
-  const { username } = req.params
-  selectedUser(username).then((user) => {
-    res.status(200).send({user})
-  })
-  .catch((err) => {
-    next(err)
-  })
-}
+  const { username } = req.params;
+  selectedUser(username)
+    .then((user) => {
+      res.status(200).send({ user });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.patchComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { votes } = req.body;
+
+  if (!votes) {
+    return res.status(400).send({ msg: "No vote" });
+  }
+
+  if (isNaN(comment_id)) {
+    return res.status(400).send({ msg: "Comment_id must be a number" });
+  }
+  updateComment(comment_id, votes)
+    .then((comment) => {
+      res.status(200).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};

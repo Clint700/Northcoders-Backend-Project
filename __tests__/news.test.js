@@ -109,7 +109,6 @@ describe("task-5-/api/articles", () => {
           expect(typeof article.created_at).toBe("string");
           expect(typeof article.votes).toBe("number");
           expect(typeof article.article_img_url).toBe("string");
-          expect(typeof article.comment_count).toBe("number");
           expect(article).not.toHaveProperty("body");
         });
       });
@@ -522,5 +521,36 @@ describe("GET /api/articles (sorting queries)", () => {
         expect(msg).toBe("Topic not found");
       });
   });
+});
 
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("200: /api/articles/:article_id responds with the article with comment_count included", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+
+  test("404: Invalid article ID reponds with an error - Article not found", () => {
+    return request(app)
+      .get("/api/articles/404")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article not found")
+      });
+  });
 });

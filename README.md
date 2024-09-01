@@ -24,10 +24,10 @@ Welcome to the Northcoders News API, a RESTful API designed as part of the North
 
 ## Key Features
 
-- **Articles:** Fetch all articles, filter by topic, sort by various fields, and get a single article by ID.
-- **Comments:** Add, fetch, and delete comments associated with specific articles.
-- **Users:** Fetch user profiles by username.
-- **Topics:** Fetch all available topics.
+Articles: Fetch all articles, filter by topic, sort by various fields, and get a single article by ID.
+Comments: Add, fetch, and delete comments associated with specific articles.
+Users: Fetch user profiles by username.
+Topics: Fetch all available topics.
 
 ## Getting Started
 
@@ -35,14 +35,14 @@ Welcome to the Northcoders News API, a RESTful API designed as part of the North
 
 To set up the project locally, follow these steps:
 
-1. **Clone the Repository:**
+1. Clone the Repository:**
 
    ```bash
    git clone https://github.com/Clint700/Northcoders-Backend-Project.git
    cd Northcoders-Backend-Project
    ```
 
-2. **Install Dependencies:**
+2. Install Dependencies:
 
    Ensure you have Node.js installed, then run:
 
@@ -54,7 +54,7 @@ To set up the project locally, follow these steps:
 
 Create environment variables files to store database connection strings:
 
-1. **Development Environment:**
+1. Development Environment:
    
    Create a `.env.development` file:
 
@@ -62,7 +62,7 @@ Create environment variables files to store database connection strings:
    PGDATABASE=nc_news
    ```
 
-2. **Test Environment:**
+2. Test Environment:
 
    Create a `.env.test` file:
 
@@ -70,7 +70,7 @@ Create environment variables files to store database connection strings:
    PGDATABASE=nc_news_test
    ```
 
-3. **Production Environment:**
+3. Production Environment:
 
    Create a `.env.production` file:
 
@@ -108,13 +108,15 @@ The server will be running at `http://localhost:9090/`.
 
 The API provides the following endpoints:
 
-- **GET /api/articles Fetch all articles.
-- **GET /api/articles/:article_id Fetch a single article by ID.
-- **GET /api/articles/:article_id/comments Fetch a single article by ID with all its comments.
-- **POST /api/articles/:article_id/comments Add a comment to an article.
-- **GET /api/users Fetch all users.
-- **GET /api/users/:username Fetch a single user by username.
-- **GET /api/topics Fetch all topics.
+- GET /api/articles Fetch all articles.
+- GET /api/articles/:article_id Fetch a single article by ID.
+- GET /api/articles/:article_id/comments Fetch a single article by ID with all its comments.
+- POST /api/articles/:article_id/comments Add a comment to an article.
+- GET /api/users Fetch all users.
+- GET /api/users/:username Fetch a single user by username.
+- GET /api/topics Fetch all topics.
+
+- For full endpoint review, please navigate to the endpoint.json file.
 
 For a detailed overview of all endpoints and their usage, please refer to the [API documentation](https://northcoders-backend-project.onrender.com/api).
 
@@ -122,8 +124,8 @@ For a detailed overview of all endpoints and their usage, please refer to the [A
 
 This API is hosted on Render and connected to a PostgreSQL database hosted on Supabase.
 
-- **API Base URL:** [Render Hosted API](https://northcoders-backend-project.onrender.com/api)
-- **Supabase Dashboard:** [Supabase Database](https://supabase.com/dashboard/project/qcihkqwrmqkgcwxkxwdy/database/tables)
+- API Base URL: [Render Hosted API](https://northcoders-backend-project.onrender.com/api)
+- Supabase Dashboard: [Supabase Database](https://supabase.com/dashboard/project/qcihkqwrmqkgcwxkxwdy/database/tables)
 
 The API is live and accessible at the Render URL, where you can interact with it using the provided endpoints.
 
@@ -131,8 +133,8 @@ The API is live and accessible at the Render URL, where you can interact with it
 
 This project was developed by [Clinton Onyekwere](www.linkedin.com/in/clinton-onyekwere-654440192) as part of the Northcoders Backend Bootcamp Project.
 
-- **GitHub:** [Clinton Onyekwere's GitHub](https://github.com/Clint700/Northcoders-Backend-Project.git)
-- **LinkedIn:** [Clinton Onyekwere on LinkedIn](www.linkedin.com/in/clinton-onyekwere-654440192)
+-GitHub: [Clinton Onyekwere's GitHub](https://github.com/Clint700/Northcoders-Backend-Project.git)
+-LinkedIn: [Clinton Onyekwere on LinkedIn](www.linkedin.com/in/clinton-onyekwere-654440192)
 
 ## License
 

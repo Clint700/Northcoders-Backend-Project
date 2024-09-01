@@ -578,3 +578,53 @@ describe("GET /api/users/:username", () => {
       });
   });
 });
+
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: Responds with the updated comment", () => {
+    const newVote = { votes: -1 };
+
+    return request(app)
+      .patch("/api/comments/2")
+      .send(newVote)
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment.votes).toBe(13);
+      });
+  });
+
+  test("404: Invalid comment_id", () => {
+    const newVote = { votes: -1 };
+
+    return request(app)
+      .patch("/api/comments/200")
+      .send(newVote)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid comment_id");
+      });
+  });
+
+  test("400: Responds with appropriate error when comment_id is not a number", () => {
+    const newVote = { votes: -1 };
+
+    return request(app)
+      .patch("/api/comments/not-a-number")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Comment_id must be a number");
+      });
+  });
+
+  test("400: return error msg when newVote is empty or doesn't contain votes", () => {
+    const newVote = {};
+
+    return request(app)
+      .patch("/api/comments/2")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No vote");
+      });
+  });
+});

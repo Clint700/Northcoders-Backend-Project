@@ -109,12 +109,11 @@ exports.insertComment = (article_id, username, body) => {
     });
 };
 
-exports.insertVote =  async (article_id, votes) => {
-  const { rows } = await db
-    .query(
-      "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *",
-      [votes, article_id]
-    );
+exports.insertVote = async (article_id, votes) => {
+  const { rows } = await db.query(
+    "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *",
+    [votes, article_id]
+  );
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Invalid article ID" });
   }
@@ -122,10 +121,10 @@ exports.insertVote =  async (article_id, votes) => {
 };
 
 exports.deletedComment = async (comment_id) => {
-  const { rows } = await db
-    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [
-      comment_id,
-    ]);
+  const { rows } = await db.query(
+    `DELETE FROM comments WHERE comment_id = $1 RETURNING *;`,
+    [comment_id]
+  );
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Comment not found" });
   }
@@ -137,11 +136,23 @@ exports.selectedUsers = async () => {
   return rows;
 };
 
-exports.selectedUser = async ( username ) => {
-  const { rows } = await db
-    .query(`SELECT * FROM users WHERE username = $1`, [username]);
+exports.selectedUser = async (username) => {
+  const { rows } = await db.query(`SELECT * FROM users WHERE username = $1`, [
+    username,
+  ]);
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Invalid username" });
   }
   return rows[0];
-}
+};
+
+exports.updateComment = async (comment_id, votes) => {
+  const { rows } = await db.query(
+    "UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *",
+    [votes, comment_id]
+  );
+  if (rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "Invalid comment_id" });
+  }
+  return rows[0];
+};

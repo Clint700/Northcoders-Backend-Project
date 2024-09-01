@@ -7,6 +7,7 @@ const {
   insertComment,
   insertVote,
   deletedComment,
+  selectedUser,
 } = require("../models/news.models");
 const endpoints = require("../endpoints.json");
 
@@ -121,3 +122,13 @@ exports.getUsers = (_req, res, _next) => {
     res.status(200).send({ users });
   });
 };
+
+exports.getUsersByID = (req, res, next) => {
+  const { username } = req.params
+  selectedUser(username).then((user) => {
+    res.status(200).send({user})
+  })
+  .catch((err) => {
+    next(err)
+  })
+}

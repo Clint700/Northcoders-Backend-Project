@@ -550,7 +550,31 @@ describe("GET /api/articles/:article_id (comment_count)", () => {
       .get("/api/articles/404")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Article not found")
+        expect(msg).toBe("Article not found");
+      });
+  });
+});
+
+describe("GET /api/users/:username", () => {
+  test("200: responds with a user object", () => {
+    return request(app)
+      .get("/api/users/rogersop")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user).toEqual({
+          username: "rogersop",
+          avatar_url: expect.any(String),
+          name: expect.any(String),
+        });
+      });
+  });
+
+  test("404: Invalid username input", () => {
+    return request(app)
+      .get("/api/users/unknown")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid username");
       });
   });
 });

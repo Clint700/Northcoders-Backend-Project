@@ -129,5 +129,14 @@
       "method": "GET"
     },
     "response": "api responds with approapriate articles for topic query"
+  },
+
+  "GET /api/articles/:article_id (comment_count)": {
+    "description": "This endpoint now has a comment_count added to it",
+    "example_request": {
+      "url": "/api/articles/3",
+      "method": "GET"
+    },
+    "response": "api responds with article of the given article id with comment_count"
   }
 }

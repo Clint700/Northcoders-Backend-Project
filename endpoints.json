@@ -2,6 +2,8 @@
   "GET /api": {
     "description": "serves up a json representation of all the available endpoints of the api"
   },
+
+
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
@@ -9,6 +11,8 @@
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
+
+
   "GET /api/articles": {
     "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
@@ -27,6 +31,7 @@
     }
   },
 
+
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of all comments for a given article_id and appropriate errors that might occur",
     "exampleResponse": {
@@ -43,6 +48,7 @@
       ]
     }
   },
+
 
   "POST /api/articles/:article_id/comments": {
     "description": "Adds a new comment to the article specified by `article_id`. Requires `username` and `body` in the request body.",
@@ -66,6 +72,7 @@
     }
   },
 
+
   "PATCH /api/articles/:article_id": {
     "description": "This endpoint allows users to update the vote count of an article by its article_id. The request body should contain an object specifying the inc_votes value, which determines how much the votes property should be incremented or decremented. The response returns the updated article with the new vote count.",
     "example_request": {
@@ -87,6 +94,7 @@
     }
   },
 
+
   "DELETE /api/comments/:comment_id": {
     "description": "This endpoint allows users to delete a comment through the comment_id",
     "example_request": {
@@ -94,6 +102,7 @@
       "method": "DELETE"
     }
   },
+
 
   "GET /api/users": {
     "description": "This endpoint allows users to fetch all users",
@@ -113,6 +122,7 @@
     ]
   },
 
+
   "GET /api/articles/sort_by=query&order=ascORdsc": {
     "description": "This endpoint allows user to query articles using sort_by and order",
     "example_request": {
@@ -121,6 +131,7 @@
     },
     "response": "api responds with approapriate article for the sort_by and order queries"
   },
+
 
   "GET /api/articles/topic=query": {
     "description": "This endpoint allows user to query articles using topic",
@@ -131,6 +142,7 @@
     "response": "api responds with approapriate articles for topic query"
   },
 
+
   "GET /api/articles/:article_id (comment_count)": {
     "description": "This endpoint now has a comment_count added to it",
     "example_request": {
@@ -140,6 +152,7 @@
     "response": "api responds with article of the given article id with comment_count"
   },
 
+  
   "GET /api/users/:username": {
     "description": "Returns a user object by username",
     "example_request": {
